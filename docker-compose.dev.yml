@@ -1,0 +1,117 @@
+version: '3'
+services:
+  
+  mongo-test:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+
+  #Gateway
+  gateway:
+    container_name: gateway
+    build: ./gateway
+    ports:
+      - 3000:3000
+    networks:
+      - event
+      - hotel
+      - transport
+      - restaurant
+      - bar
+      - user
+      - rating
+    depends_on:
+      - event
+      - hotel
+      - transport
+      - restaurant
+      - bar
+      - user
+      - rating
+    command: ["npm", "run", "test"]
+
+  #Event
+  event:
+    container_name: event-service
+    restart: unless-stopped
+    build: ./event
+    networks:
+      - event
+    command: ["npm", "run", "test"]
+
+  #Hotel
+  hotel:
+    container_name: hotel-service
+    restart: unless-stopped
+    build: ./hotel
+    networks:
+      - hotel
+    command: ["npm", "run", "test"]
+
+  #Transport
+  transport:
+    container_name: transport-service
+    restart: unless-stopped
+    build: ./transport
+    networks:
+      - transport
+    command: ["npm", "run", "test"]
+
+  #Restaurant
+  restaurant:
+    container_name: restaurant-service
+    restart: unless-stopped
+    build: ./restaurant
+    networks:
+      - restaurant
+    command: ["npm", "run", "test"]
+
+  #Bar
+  bar:
+    container_name: bar-service
+    restart: unless-stopped
+    build: ./bar
+    networks:
+      - bar
+    command: ["npm", "run", "test"]
+
+  #User
+  mongo-user:
+    container_name: mongo-user
+    image: mongo:latest
+    networks:
+      - user
+  user:
+    container_name: user-service
+    restart: unless-stopped
+    build: ./user
+    networks:
+      - user
+    depends_on:
+      - mongo-user
+    command: ["npm", "run", "test"]
+
+  #Rating
+  mongo-rating:
+    container_name: mongo-rating
+    image: mongo:latest
+    networks:
+      - rating
+  rating:
+    container_name: rating-service
+    restart: unless-stopped
+    build: ./rating
+    networks:
+      - rating
+    depends_on:
+      - mongo-rating
+    command: ["npm", "run", "test"]
+
+networks:
+  event:
+  hotel:
+  transport:
+  restaurant:
+  bar:
+  user:
+  rating:

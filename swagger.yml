@@ -1,0 +1,671 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Lebontrip
+  description: Lebontrip
+paths:
+  /drink:
+    get:
+      summary: Returns a list of bars
+      tags:
+        - bar
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City where you want to get bars
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+        '400':
+          description: Bad request, you should provide a city
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No bar found with these criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /enjoy/events:
+    get:
+      summary: Returns a list of events
+      tags:
+        - enjoy
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City where you want to get events
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON array of events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+  /enjoy/places:
+    get:
+      summary: Returns a list of enjoy places
+      tags:
+        - enjoy
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City where you want to get places
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+        '400':
+          description: Bad request, you should provide a city
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No enjoy place found with these criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /sleep:
+    get:
+      summary: Returns a list of hotels
+      tags:
+        - hotel
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City where you want to get hotels
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+        '400':
+          description: Bad request, you should provide a city
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No hotel found with these criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /rating:
+    post:
+      summary: Create a new rating
+      tags:
+        - rating
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+                value:
+                  type: string
+                comment:
+                  type: string
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad request, all fields must be completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Rating already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get ratings
+      tags:
+        - rating
+      parameters:
+        - name: placeId
+          in: query
+          description: ID of the event you want ratings
+          schema:
+            type: string
+        - name: authorId
+          in: query
+          description: ID of the person you want ratings
+          schema:
+            type: string
+      responses:
+        '200':
+          description: An array of ratings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ratings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Rating'
+  /eat:
+    get:
+      summary: Returns a list of restaurants
+      tags:
+        - restaurant
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City where you want to get restaurants
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+        '400':
+          description: Bad request, you should provide a city
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No restaurant found with these criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /travel:
+    get:
+      summary: Returns a list of transports
+      tags:
+        - transport
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City where you want to get transports
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+        '400':
+          description: Bad request, you should provide a city
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No transport found with these criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user:
+    post:
+      summary: Create a new user
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad request, all fields must be completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Email address already used
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update user
+      tags:
+        - user
+      requestBody:
+        description: Only completed fields will be changed
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                address:
+                  type: object
+                  properties:
+                    street:
+                      type: string
+                    zipcode:
+                      type: string
+                    city:
+                      type: string
+                    country:
+                      type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad address format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Get user details
+      tags:
+        - user
+      responses:
+        '200':
+          description: User details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete user
+      tags:
+        - user
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/login:
+    post:
+      summary: Login
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Invalid password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Invalid email address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/bookmark:
+    post:
+      summary: Add a bookmark
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Place'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Bad request, all fields must be completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Bookmark already added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/bookmark/{bookmarkId}:
+    delete:
+      summary: Delete a bookmark
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: bookmarkId
+          schema:
+            type: string
+          required: true
+          description: Id of the bookmark
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Bookmark not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/booking/{bookingId}:
+    post:
+      summary: Add a booking
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: bookingId
+          schema:
+            type: string
+          required: true
+          description: Id of the booking
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Booking already added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a booking
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: bookingId
+          schema:
+            type: string
+          required: true
+          description: Id of the booking
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Booking not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /similar/{placeId}:
+    get:
+      summary: Get similar places of a place
+      tags:
+        - places
+      parameters:
+        - in: path
+          name: placeId
+          schema:
+            type: string
+          required: true
+          description: ID of the place
+      responses:
+        '200':
+          description: A JSON array of places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+        '404':
+          description: No similar places found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Ludo978/Lebontrip/1.0.0
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+          format: url
+        image:
+          type: string
+          format: url
+        date:
+          type: string
+          format: date-time
+        location:
+          type: object
+          properties:
+            name:
+              type: string
+            address:
+              type: string
+            lat:
+              type: number
+              format: float
+            lng:
+              type: number
+              format: float
+        price:
+          type: object
+          properties:
+            min:
+              type: number
+              format: float
+            max:
+              type: number
+              format: float
+    Place:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        address:
+          type: string
+        lat:
+          type: number
+          format: float
+        lng:
+          type: number
+          format: float
+    Rating:
+      type: object
+      properties:
+        id:
+          type: string
+        placeId:
+          type: string
+        authorId:
+          type: string
+        value:
+          type: number
+        comment:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        bookmarks:
+          type: array
+          items:
+            type: string
+            format: id
+        bookingIds:
+          type: array
+          items:
+            type: string
+            format: id
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            zipcode:
+              type: string
+            city:
+              type: string
+            country:
+              type: string

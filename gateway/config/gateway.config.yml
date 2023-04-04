@@ -1,0 +1,120 @@
+http:
+  port: 3000
+apiEndpoints:
+  event:
+    host: localhost
+    paths: ['/enjoy/*', '/similar/*']
+  hotel:
+    host: localhost
+    paths: '/sleep'
+  transport:
+    host: localhost
+    paths: '/travel'
+  restaurant:
+    host: localhost
+    paths: '/eat'
+  bar:
+    host: localhost
+    paths: '/drink'
+  user:
+    host: localhost
+    paths: ['/user', '/user/*']
+  rating:
+    host: localhost
+    paths: ['/rating', '/rating/*']
+serviceEndpoints:
+  eventService:
+    url: 'http://event-service:3000'
+  hotelService:
+    url: 'http://hotel-service:3000'
+  transportService:
+    url: 'http://transport-service:3000'
+  restaurantService:
+    url: 'http://restaurant-service:3000'
+  barService:
+    url: 'http://bar-service:3000'
+  userService:
+    url: 'http://user-service:3000'
+  ratingService:
+    url: 'http://rating-service:3000'
+policies:
+  - jwt
+  - proxy
+  - request-transformer
+pipelines:
+  eventPipeline:
+    apiEndpoints:
+      - event
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: eventService
+              stripPath: true
+  hotelPipeline:
+    apiEndpoints:
+      - hotel
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: hotelService
+              stripPath: true
+  transportPipeline:
+    apiEndpoints:
+      - transport
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: transportService
+              stripPath: true
+  restaurantPipeline:
+    apiEndpoints:
+      - restaurant
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: restaurantService
+              stripPath: true
+  barPipeline:
+    apiEndpoints:
+      - bar
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: barService
+              stripPath: true
+  userPipeline:
+    apiEndpoints:
+      - user
+    policies:
+      - jwt:
+          - action:
+              secretOrPublicKey: 'ICV6gy7CDKPHMGJxV80nDZ7Vxe0ciqyzXD_Hr4mTDrdTyi6fNleYAyhEZq2J29HSI5bhWnJyOBzg2bssBUKMY'
+              checkCredentialExistence: false
+              passThrough: true
+      - request-transformer:
+          - action:
+              body:
+                add:
+                  user: req.user
+      - proxy:
+          - action:
+              serviceEndpoint: userService
+              stripPath: true
+  ratingPipeline:
+    apiEndpoints:
+      - rating
+    policies:
+      - jwt:
+          - action:
+              secretOrPublicKey: 'ICV6gy7CDKPHMGJxV80nDZ7Vxe0ciqyzXD_Hr4mTDrdTyi6fNleYAyhEZq2J29HSI5bhWnJyOBzg2bssBUKMY'
+              checkCredentialExistence: false
+              passThrough: true
+      - request-transformer:
+          - action:
+              body:
+                add:
+                  user: req.user
+      - proxy:
+          - action:
+              serviceEndpoint: ratingService
+              stripPath: true
